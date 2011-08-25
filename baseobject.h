@@ -31,7 +31,7 @@ public:
 protected:
 private:
 
-    static void getNextId() {
+    static int getNextId() {
         int ret = last_id;
         last_id++;
         return ret;

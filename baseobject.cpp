@@ -1,6 +1,6 @@
 #include "baseobject.h"
 
-static int BaseObject::last_id = 0;
+int BaseObject::last_id = 0;
 
 BaseObject::BaseObject() {
     x_pos = 0.0f;
