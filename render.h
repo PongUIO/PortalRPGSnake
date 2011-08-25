@@ -3,8 +3,7 @@
 #include<QtGui>
 #include<qgl.h>
 #include<iostream>
-#include "Simulation.h"
-#include "../util/camera.h"
+#include "camera.h"
 
 class MyGLDrawer : public QGLWidget {
 	Q_OBJECT        // must include this if you use Qt signals/slots
@@ -22,7 +21,7 @@ public slots:
 public:
         int lastX, lastY;
         //Camera *cam;
-        MyGLDrawer(QWidget *parent = 0)
+        MyGLDrawer(Camera cam, QWidget *parent = 0)
 		: QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
                 this->cam = cam;
                 lastX = width()/2;
@@ -108,9 +107,7 @@ protected:
                 glClear(GL_COLOR_BUFFER_BIT);
                 glMatrixMode(GL_PROJECTION);
                 glLoadIdentity();
-                //glOrtho(-cam->zoom, cam->zoom, -cam->zoom*cam->ratio, cam->zoom*cam->ratio, 0.01, 1000);
-                //glTranslatef(cam->pos.x,cam->pos.y,-1);
-                glOrtho(1, 1, 1, 1, 0.01, 1000);
+                glOrtho(-cam->zoom, cam->zoom, -cam->zoom*cam->ratio, cam->zoom*cam->ratio, 0.01, 1000);
                 glTranslatef(cam->pos.x,cam->pos.y,-1);
 
                 glMatrixMode(GL_MODELVIEW);
@@ -121,7 +118,6 @@ protected:
                 //glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
                 glEnable(GL_TEXTURE_2D);
 
-                int mt;
                 //       glViewport(cam->pos.x, cam->pos.y, getWidth(), getHeight());
                 int fx = -cam->pos.x-cam->zoom-1;
                 int tx = -cam->pos.x+cam->zoom+1;
@@ -129,12 +125,7 @@ protected:
                 int ty = -cam->pos.y+cam->zoom*cam->ratio+1;
                 for (i = fx; i < tx; i++) {
                         for (j = fy; j < ty; j++) {
-                                mt = wld->getTile(i, j).getType();
-                                if (mt == 0) {
-                                        continue;
-                                }
-                                glTexSubImage2D(GL_TEXTURE_2D, 0, 0,0 , data[mt].width(), data[mt].height(),  GL_RGBA, GL_UNSIGNED_BYTE, data[mt].bits() );
-                                glBindTexture(GL_TEXTURE_2D, textures[mt]);
+                                //glBindTexture(GL_TEXTURE_2D, textures[mt]);
                                 glBegin(GL_QUADS);
                                 glTexCoord2f(0,1); glVertex2f(i,j+1);  // lower left
                                 glTexCoord2f(0,0); glVertex2f(i,j); // lower right
