@@ -10,7 +10,9 @@ TARGET = PortalRPGSnake
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    objectlist.cpp \
+    baseobject.cpp
 
 HEADERS  += render.h \
     camera.h \
@@ -18,7 +20,9 @@ HEADERS  += render.h \
     gamecontroller.h \
     gamebutton.h \
     customlabel.h \
-    main.h
+    main.h \
+    objectlist.h \
+    baseobject.h
 
 RESOURCES += \
     resources.qrc
