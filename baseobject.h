@@ -16,9 +16,9 @@ public:
     virtual void postThink();
 
     // World position
-    void setPos(float x, float y) { x_pos = x; y_pos = y; }
-    virtual float getX() { return x_pos; }
-    virtual float getY() { return y_pos; }
+    void setPos(int x, int y) { x_pos = x; y_pos = y; }
+    virtual int getX() { return x_pos; }
+    virtual int getY() { return y_pos; }
 
     virtual float getWidth() { return width; }
     virtual float getHeight() { return height; }
@@ -43,8 +43,8 @@ private:
 
     bool inPortal;
 
-    float x_pos;
-    float y_pos;
+    int x_pos;
+    int y_pos;
 
     float width;
     float height;
