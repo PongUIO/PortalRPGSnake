@@ -1,8 +1,8 @@
 #ifndef RENDER_H
 #define RENDER_H
 #include<QtGui>
-#include<qgl.h>
 #include<iostream>
+#include <QGLWidget>
 #include "camera.h"
 
 class MyGLDrawer : public QGLWidget {
@@ -20,15 +20,12 @@ public slots:
 
 public:
         int lastX, lastY;
-        //Camera *cam;
-        MyGLDrawer(Camera cam, QWidget *parent = 0)
+        Camera *cam;
+        MyGLDrawer(Camera *cam, QWidget *parent = 0)
 		: QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
                 this->cam = cam;
                 lastX = width()/2;
                 lastY = height()/2;
-                sim = simIn;
-                wld = &sim->getState().getWorld();
-                wld->getTile(3,0).setType(1);
 
 
         }
@@ -108,7 +105,7 @@ protected:
                 glMatrixMode(GL_PROJECTION);
                 glLoadIdentity();
                 glOrtho(-cam->zoom, cam->zoom, -cam->zoom*cam->ratio, cam->zoom*cam->ratio, 0.01, 1000);
-                glTranslatef(cam->pos.x,cam->pos.y,-1);
+                glTranslatef(cam->x,cam->y,-1);
 
                 glMatrixMode(GL_MODELVIEW);
                 glLoadIdentity();
@@ -118,11 +115,11 @@ protected:
                 //glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
                 glEnable(GL_TEXTURE_2D);
 
-                //       glViewport(cam->pos.x, cam->pos.y, getWidth(), getHeight());
-                int fx = -cam->pos.x-cam->zoom-1;
-                int tx = -cam->pos.x+cam->zoom+1;
-                int fy = -cam->pos.y-cam->zoom*cam->ratio-1;
-                int ty = -cam->pos.y+cam->zoom*cam->ratio+1;
+                //       glViewport(cam->x, cam->y, getWidth(), getHeight());
+                int fx = -cam->x-cam->zoom-1;
+                int tx = -cam->x+cam->zoom+1;
+                int fy = -cam->y-cam->zoom*cam->ratio-1;
+                int ty = -cam->y+cam->zoom*cam->ratio+1;
                 for (i = fx; i < tx; i++) {
                         for (j = fy; j < ty; j++) {
                                 //glBindTexture(GL_TEXTURE_2D, textures[mt]);
@@ -147,10 +144,10 @@ protected:
                 swapBuffers();
         }
         /*double getXPix(int x) {
-                return -1+(((double)x)/width())*2-cam->pos.x;
+                return -1+(((double)x)/width())*2-cam->x;
         }
         double getYPix(int y) {
-                return 1-(((double)y)/height())*2-cam->pos.y;
+                return 1-(((double)y)/height())*2-cam->y;
         }*/
 
 };

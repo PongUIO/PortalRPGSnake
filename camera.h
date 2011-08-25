@@ -3,7 +3,7 @@
 #include<cmath>
 class Camera {
 public:
-        double zoom, dzoom, panfriction, zoomfriction, ratio, x, y, delta;
+        double zoom, dzoom, panfriction, zoomfriction, ratio, x, y, delta, dx, dy;
         int lastX, lastY, xres, yres;
 
         Camera(double x, double y, int xres, int yres) {
@@ -46,7 +46,6 @@ public:
                 //qDebug("%4.4f %4.4f\n", temp.x, temp.y);
                 x += xPixToDouble(lastX)*(-fabs(dzoom*5));
                 y += yPixToDouble(lastY)*(-fabs(dzoom*5));
-                pos += temp;
                 if (zoom < 0.01) {
                         zoom = 0.01;
                 } else if (zoom > 32) {

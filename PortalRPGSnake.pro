@@ -4,14 +4,24 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
-TARGET = ProtalRPGSnake
+TARGET = PortalRPGSnake
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += main.cpp
 
-HEADERS  += mainwindow.h \
-    render.h
+HEADERS  += render.h \
+    camera.h \
+    menubutton.h \
+    gamecontroller.h \
+    gamebutton.h \
+    customlabel.h \
+    main.h
+
+RESOURCES += \
+    resources.qrc
+
+OTHER_FILES += \
+    graphics/startgame.xcf
