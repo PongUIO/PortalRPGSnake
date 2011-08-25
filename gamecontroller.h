@@ -70,7 +70,7 @@ public:
 		label2->setPixmap(QPixmap(":/graphics/temp/temp2.png"));
 		label2->resize(60,60);
                 profiles[0] = QPixmap(":/graphics/profiles/test.xcf");
-		space = new QSpacerItem(main->width(), 0, QSizePolicy::Expanding);
+                space = new QSpacerItem(main->width(), 0, QSizePolicy::Expanding);
 		label->show();
 		label2->show();
 		lower->insertWidget(0, label);

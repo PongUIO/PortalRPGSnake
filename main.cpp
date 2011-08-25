@@ -15,10 +15,10 @@
 #define RATE 60
 #endif
 
-GameController *test;
+GameController *gc;
 
 void gameStart() {
-        test->showAll();
+        gc->showAll();
 }
 
 int main(int argc, char *argv[]) {
@@ -32,10 +32,10 @@ int main(int argc, char *argv[]) {
         gameButton->setPixmap(QPixmap(":/graphics/startgame.xcf"));
         gameButton->move(menu->geometry().width()/2-gameButton->pixmap()->width()/2, menu->geometry().height()/2-gameButton->pixmap()->height()/2);
         gameButton->show();
-        test = new GameController(menu);
-        test->hideAll();
+        gc = new GameController(menu);
+        gc->hideAll();
         app.exec();
-        delete test;
+        delete gc;
         delete gameButton;
         delete menu;
         return 0;//main.exec();
