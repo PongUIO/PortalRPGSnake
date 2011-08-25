@@ -27,9 +27,9 @@ public:
                 this->lastX = lastX;
                 this->lastY = lastY;
                 dx += ((lastX > xres -10 ) * (-(lastX - xres + 10)*0.00001) +
-                            (lastX < 10) * (-(lastX-10)*0.00001))/2;
+                            (lastX < 10) * (-(lastX-10)*0.00001))*2;
                 dy += ((lastY < 10) * ((lastY - 10)*0.00001) +
-                            (lastY > yres - 10) * ((lastY - yres + 10)* 0.00001))/2;
+                            (lastY > yres - 10) * ((lastY - yres + 10)* 0.00001))*2;
         }
         void modZoom(double mod) {
                 dzoom += mod;

@@ -21,12 +21,23 @@ public slots:
 public:
         int lastX, lastY;
         Camera *cam;
+        float colors[6][3];
         MyGLDrawer(Camera *cam, QWidget *parent = 0)
 		: QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
                 this->cam = cam;
                 lastX = width()/2;
                 lastY = height()/2;
-
+                colors[0][0] = 0;
+                colors[0][1] = 0.9;
+                colors[0][2] = 0;
+                colors[1][0] = 0.6;
+                colors[1][1] = 0.25;
+                colors[1][2] = 0;
+                for (int i = 2; i < 6; i++) {
+                        colors[i][0] = 1;
+                        colors[i][1] = 1;
+                        colors[i][2] = 0;
+                }
 
         }
 
@@ -124,11 +135,11 @@ protected:
                         for (j = fy; j < ty; j++) {
                                 //glBindTexture(GL_TEXTURE_2D, textures[mt]);
                                 glBegin(GL_QUADS);
-                                glColor3f(1-i/16.,1-j/16., 0);
-                                glTexCoord2f(0,1); glVertex2f(i,j+1);  // lower left
-                                glTexCoord2f(0,0); glVertex2f(i,j); // lower right
-                                glTexCoord2f(1,0); glVertex2f(i+1,j);// upper right
-                                glTexCoord2f(1,1); glVertex2f(i+1,j+1); // upper left
+                                glColor3fv(colors[1]);
+                                glVertex2f(i,j+1);  // lower left
+                                glVertex2f(i,j); // lower right
+                                glVertex2f(i+1,j);// upper right
+                                glVertex2f(i+1,j+1); // upper left
                                 glEnd();
                         }
 

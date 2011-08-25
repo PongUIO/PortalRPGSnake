@@ -22,6 +22,8 @@ HEADERS  += render.h \
     customlabel.h \
     main.h \
     objectlist.h \
+    baseobject.h \
+    objectlist.h \
     baseobject.h
 
 RESOURCES += \
