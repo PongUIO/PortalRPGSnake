@@ -26,7 +26,7 @@ public slots:
                 } else {
                         food--;
                 }
-                if (getBlock(snakeXPos, snakeYPos) == APPLE) {
+                while (getBlock(snakeXPos, snakeYPos) == APPLE) {
                         world[snakeXPos][snakeYPos] = GRASS;
                         food += 2;
                         placeApple();
