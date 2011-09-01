@@ -153,7 +153,7 @@ public:
             } else if (dir == SNAKELEFT || dir == SNAKERIGHT) {
                 max = xsize;
             } else {
-                return;
+                return false;
             }
 
             int testX = snakeXPos, testY = snakeYPos;
