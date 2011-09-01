@@ -74,6 +74,12 @@ public:
 
         void handleInput(int key) {
                 bool stepAfter = true;
+
+                /*
+                int revDir = direction - 2;
+                if (revDir < 0) { revDir += 4; }
+                */
+
                 if (key == Qt::Key_W) {
                         direction = SNAKEUP;
                 } else if (key == Qt::Key_A) {
@@ -82,22 +88,44 @@ public:
                         direction = SNAKEDOWN;
                 } else if (key == Qt::Key_D) {
                         direction = SNAKERIGHT;
-                } else if (key == Qt::Key_Control) {
+                } else {
+                    stepAfter = false;
+
+                    if (key == Qt::Key_Control) {
                         portalColor = !portalColor;
-                        stepAfter = false;
+
+                    } else if (key == Qt::Key_Up) {
+                        //if (revDir == SNAKEUP) { return; }
+                        shootPortal(SNAKEUP);
+
+                    } else if (key == Qt::Key_Left) {
+                        //if (revDir == SNAKELEFT) { return; }
+                        shootPortal(SNAKELEFT);
+
+                    } else if (key == Qt::Key_Down) {
+                        //if (revDir == SNAKEDOWN) { return; }
+                        shootPortal(SNAKEDOWN);
+
+                    } else if (key == Qt::Key_Right) {
+                        //if (revDir == SNAKERIGHT) { return; }
+                        shootPortal(SNAKERIGHT);
+                    }
                 }
+
                 if (stepAfter) {
                         skipNext = false;
                         step();
                         skipNext = true;
                 }
+
+
         }
 
         void shootPortal(int dir) {
-
+            // snakeXPos, snakeYPos
         }
 
-        void getFirstWallForDirection(int &x, int &y) {
+        void getFirstWallForDirection(int dir) {
 
         }
 
