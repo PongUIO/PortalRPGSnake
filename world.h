@@ -123,6 +123,26 @@ public:
 
         void shootPortal(int dir) {
             // snakeXPos, snakeYPos
+            int portalX = 0, portalY = 0;
+
+            if (getFirstWallForDirection(dir, &portalX, &portalY)) {
+                closeOldPortal();
+                world[portalX][portalY] = portalColor ? PORTALBLUE : PORTALORANGE;
+                portalColor = !portalColor;
+            }
+        }
+
+        void closeOldPortal() {
+            int color = portalColor ? PORTALBLUE : PORTALORANGE;
+            for (int x = 0; x < xsize; x++) {
+                for (int y = 0; x < ysize; y++) {
+
+                    if (world[x][y] == color) {
+                        world[x][y] = WALL;
+                        return;
+                    }
+                }
+            }
         }
 
         bool getFirstWallForDirection(int dir, int *x, int *y) {
@@ -145,8 +165,15 @@ public:
                     return false;
                 }
 
+                if (getBlock(testX, testY) == WALL) {
+                    *x = testX;
+                    *y = testY;
 
+                    return true;
+                }
             }
+
+            return false;
         }
 
         bool removeEnd(int x, int y) {
