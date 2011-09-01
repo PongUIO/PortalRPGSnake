@@ -56,8 +56,10 @@ public:
                 world = new int*[x];
                 for (int i = 0; i < x; i++) {
                         world[i] = new int[y];
+                        world[i][0] = WALL;
+                        world[i][y-1] = WALL;
                         for (int j = 0; j < y; j++) {
-                                world[i][j] = 4;
+                                world[i][j] = GRASS - (j == 0 || j == y-1) *(WALL-GRASS);
                         }
                 }
                 world[snakeXPos][snakeYPos] = direction;
