@@ -25,7 +25,8 @@ HEADERS  += render.h \
     baseobject.h \
     objectlist.h \
     baseobject.h \
-    world.h
+    world.h \
+    tiles.h
 
 RESOURCES += \
     resources.qrc

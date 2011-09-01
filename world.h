@@ -8,6 +8,10 @@ class World : public QObject {
        Q_OBJECT
 public slots:
         void step() {
+                if (skipNext) {
+                        skipNext = false;
+                        return;
+                }
                 if (snakeXPos == -1) {
                         return;
                 }
@@ -39,7 +43,9 @@ public:
         int direction;
         int xsize, ysize;
         int food;
+        bool skipNext;
         World(int x, int y, QObject *parent = 0) : QObject (parent) {
+                skipNext = false;
                 xsize = x; ysize = y;
                 snakeXPos = 3;
                 snakeYPos = 3;
@@ -74,6 +80,9 @@ public:
                 } else if (dir == Qt::Key_D) {
                         direction = 3;
                 }
+                skipNext = false;
+                step();
+                skipNext = true;
         }
 
         bool removeEnd(int x, int y) {

@@ -5,6 +5,7 @@
 #include <QGLWidget>
 #include "camera.h"
 #include "world.h"
+#include "tiles.h"
 
 class MyGLDrawer : public QGLWidget {
         Q_OBJECT
@@ -36,24 +37,24 @@ public:
                         colors[i][1] = 1;
                         colors[i][2] = 0;
                 }
-                colors[4][0] = 0;
-                colors[4][1] = 0.9;
-                colors[4][2] = 0;
-                colors[5][0] = 0.6;
-                colors[5][1] = 0.25;
-                colors[5][2] = 0;
-                colors[6][0] = 1;
-                colors[6][1] = 0.5;
-                colors[6][2] = 0;
-                colors[7][0] = 0;
-                colors[7][1] = 0;
-                colors[7][2] = 1;
-                colors[8][0] = 0.6;
-                colors[8][1] = 0.6;
-                colors[8][2] = 0;
-                colors[9][0] = 1;
-                colors[9][1] = 0;
-                colors[9][2] = 0;
+                colors[GRASS][0] = 0;
+                colors[GRASS][1] = 0.9;
+                colors[GRASS][2] = 0;
+                colors[WALL][0] = 0.6;
+                colors[WALL][1] = 0.25;
+                colors[WALL][2] = 0;
+                colors[PORTALORANGE][0] = 1;
+                colors[PORTALORANGE][1] = 0.5;
+                colors[PORTALORANGE][2] = 0;
+                colors[PORTALBLUE][0] = 0;
+                colors[PORTALBLUE][1] = 0;
+                colors[PORTALBLUE][2] = 1;
+                colors[DEADSNAKE][0] = 0.6;
+                colors[DEADSNAKE][1] = 0.6;
+                colors[DEADSNAKE][2] = 0;
+                colors[APPLE][0] = 1;
+                colors[APPLE][1] = 0;
+                colors[APPLE][2] = 0;
 
         }
 
