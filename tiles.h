@@ -10,6 +10,6 @@
 #define PORTALBLUE 7
 #define DEADSNAKE 8
 #define APPLE 9
-
+#define WALLOUTSIDE 10
 
 #endif // TILES_H
