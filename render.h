@@ -23,10 +23,10 @@ public slots:
 public:
         int lastX, lastY;
         Camera *cam;
-        float colors[10][3];
+        float colors[11][3];
         World *world;
         MyGLDrawer(Camera *cam, World *world, QWidget *parent = 0)
-                : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
+                        : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
                 setFocusPolicy(Qt::StrongFocus);
                 this->world = world;
                 this->cam = cam;
@@ -55,6 +55,9 @@ public:
                 colors[APPLE][0] = 1;
                 colors[APPLE][1] = 0;
                 colors[APPLE][2] = 0;
+                colors[WALLOUTSIDE][0] = 0.4;
+                colors[WALLOUTSIDE][1] = 0.16;
+                colors[WALLOUTSIDE][2] = 0;
 
         }
 
@@ -151,7 +154,7 @@ protected:
                 for (i = fx; i < tx; i++) {
                         for (j = fy; j < ty; j++) {
                                 glBegin(GL_QUADS);
-                                glColor3fv(colors[world->getBrick(i, j)]);
+                                glColor3fv(colors[world->getBlock(i, j)]);
                                 glVertex2f(i,j+1);  // lower left
                                 glVertex2f(i,j); // lower right
                                 glVertex2f(i+1,j);// upper right
@@ -162,13 +165,15 @@ protected:
                 }
                 i = world->snakeXPos;
                 j = world->snakeYPos;
-                glBegin(GL_QUADS);
-                glColor3fv(colors[PORTALORANGE + world->portalColor]);
-                glVertex2f(i+0.3, j+0.7);  // lower left
-                glVertex2f(i+0.3,j+0.3); // lower right
-                glVertex2f(i+0.7,j+0.3);// upper right
-                glVertex2f(i+0.7,j+0.7); // upper left
-                glEnd();
+                if (i != -1) {
+                        glBegin(GL_QUADS);
+                        glColor3fv(colors[PORTALORANGE + world->portalColor]);
+                        glVertex2f(i+0.3, j+0.7);  // lower left
+                        glVertex2f(i+0.3,j+0.3); // lower right
+                        glVertex2f(i+0.7,j+0.3);// upper right
+                        glVertex2f(i+0.7,j+0.7); // upper left
+                        glEnd();
+                }
 
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glEnable(GL_BLEND);

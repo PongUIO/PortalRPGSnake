@@ -26,12 +26,12 @@ public slots:
                 } else {
                         food--;
                 }
-                if (getBrick(snakeXPos, snakeYPos) == APPLE) {
+                if (getBlock(snakeXPos, snakeYPos) == APPLE) {
                         world[snakeXPos][snakeYPos] = GRASS;
                         food += 2;
                         placeApple();
                 }
-                if ( getBrick(snakeXPos, snakeYPos) == GRASS) {
+                if ( getBlock(snakeXPos, snakeYPos) == GRASS) {
                         world[snakeXPos][snakeYPos] = direction;
                 } else {
                         snakeXPos = -1;
@@ -64,11 +64,11 @@ public:
                 placeApple();
         }
 
-        int getBrick(int x, int y) {
+        int getBlock(int x, int y) {
                 if ( inBounds(x, y) ) {
                         return world[x][y];
                 } else {
-                        return WALL;
+                        return WALLOUTSIDE;
                 }
         }
 
@@ -223,6 +223,10 @@ public:
                                 break;
                         }
                 }
+        }
+        bool isColliding(int x, int y) {
+                int v = getBlock(x, y);
+                return v == WALL || v == WALLOUTSIDE;
         }
 };
 
