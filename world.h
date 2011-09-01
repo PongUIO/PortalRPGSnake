@@ -46,6 +46,7 @@ public:
         int xsize, ysize;
         int food;
         bool skipNext, portalColor;
+        int blueDir, orangeDir;
         World(int x, int y, QObject *parent = 0) : QObject (parent) {
                 skipNext = portalColor = false;
                 xsize = x; ysize = y;
@@ -53,6 +54,8 @@ public:
                 snakeYPos = 3;
                 direction = SNAKEUP;
                 food = 2;
+                blueDir = -1;
+                orangeDir = -1;
                 world = new int*[x];
                 for (int i = 0; i < x; i++) {
                         world[i] = new int[y];
@@ -117,8 +120,12 @@ public:
                         step();
                         skipNext = true;
                 }
+        }
 
-
+        int reverseDir(int dir) {
+            int rev = direction - 2;
+            if (rev < 0) { revDir += 4; }
+            return rev;
         }
 
         void shootPortal(int dir) {
