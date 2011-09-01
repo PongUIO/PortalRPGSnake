@@ -76,6 +76,14 @@ public:
                 }
         }
 
+        void shootPortal(int dir) {
+
+        }
+
+        void getFirstWallForDirection(int &x, int &y) {
+
+        }
+
         bool removeEnd(int x, int y) {
                 if (3 < world[x][y]) {
                         return false;
