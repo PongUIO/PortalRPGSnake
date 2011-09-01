@@ -31,7 +31,7 @@ public:
 		main = new QWidget(parent);
 		main->showFullScreen();
                 main->resize(parent->geometry().width(), parent->geometry().height());
-		cam = new Camera(0, 0, main->width(), main->height());
+                cam = new Camera(-5, -5, main->width(), main->height());
                 MyGLDrawer *drawer = new MyGLDrawer(cam, world, main);
 
 		glTimer = new QTimer(main);

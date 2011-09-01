@@ -8,7 +8,7 @@ public:
 
         Camera(double x, double y, int xres, int yres) {
                 dzoom = 0.0;
-                zoom = 1;
+                zoom = 8;
                 delta = 0.0;
                 ratio = yres/((double)xres);
                 this->x = x;

@@ -22,7 +22,7 @@ public slots:
 public:
         int lastX, lastY;
         Camera *cam;
-        float colors[8][3];
+        float colors[10][3];
         World *world;
         MyGLDrawer(Camera *cam, World *world, QWidget *parent = 0)
                 : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
@@ -43,11 +43,17 @@ public:
                 colors[5][1] = 0.25;
                 colors[5][2] = 0;
                 colors[6][0] = 1;
-                colors[6][1] = 0;
+                colors[6][1] = 0.5;
                 colors[6][2] = 0;
                 colors[7][0] = 0;
                 colors[7][1] = 0;
                 colors[7][2] = 1;
+                colors[8][0] = 0.6;
+                colors[8][1] = 0.6;
+                colors[8][2] = 0;
+                colors[9][0] = 1;
+                colors[9][1] = 0;
+                colors[9][2] = 0;
 
         }
 
@@ -56,7 +62,6 @@ protected:
         void keyPressEvent (QKeyEvent *event) {
                 world->changeDir(event->key());
                 world->step();
-                qDebug() << event->key();
         }
 
         // overriden
