@@ -1,6 +1,7 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 #include<QtGui>
+#include<Qt>
 #include<stdlib.h>
 #include<typeinfo>
 
@@ -13,6 +14,10 @@
 #define RATE 60
 #endif
 
+#ifndef GAMERATE
+#define GAMERATE 4
+#endif
+
 void something() {
 	qDebug() << "works.";
 }
@@ -20,16 +25,16 @@ void something() {
 class GameController {
 public:
 	QWidget *main;
-	QTimer *glTimer, *camTimer, *timer;
+        QTimer *glTimer, *camTimer, *timer, *gameTimer;
         Camera *cam;
         World *world;
 #ifdef WIN32
 	QPalette *p;
 #endif
         GameController(QWidget *parent = 0) {
-                world = new World(10, 10);
 		main = new QWidget(parent);
-		main->showFullScreen();
+                world = new World(10, 10);
+                main->showFullScreen();
                 main->resize(parent->geometry().width(), parent->geometry().height());
                 cam = new Camera(-5, -5, main->width(), main->height());
                 MyGLDrawer *drawer = new MyGLDrawer(cam, world, main);
@@ -40,7 +45,11 @@ public:
 
 		camTimer = new QTimer(main);
                 drawer->connect(camTimer, SIGNAL(timeout()), drawer, SLOT(moveMouseCheck()));
-		camTimer->start(1./RATE);
+                camTimer->start(1000./RATE);
+
+                gameTimer = new QTimer(main);
+                drawer->connect(gameTimer, SIGNAL(timeout()), world, SLOT(step()));
+
 
                 main->setWindowTitle(QApplication::translate("childwidget", "Child widget"));
 		drawer->setMouseTracking(true);

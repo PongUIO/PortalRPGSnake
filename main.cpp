@@ -18,6 +18,7 @@
 GameController *gc;
 
 void gameStart() {
+        gc->gameTimer->start(1000/GAMERATE);
         gc->showAll();
 }
 

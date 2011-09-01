@@ -1,15 +1,45 @@
 #ifndef WORLD_H
 #define WORLD_H
 #include <Qt>
+#include <QObject>
+#include <cstdlib>
 
-class World {
+class World : public QObject {
+       Q_OBJECT
+public slots:
+        void step() {
+                if (snakeXPos == -1) {
+                        return;
+                }
+                int oldXPos = snakeXPos;
+                int oldYPos = snakeYPos;
+                snakeXPos += getRelXDir(direction);
+                snakeYPos += getRelYDir(direction);
+                if (!food) {
+                        removeEnd(oldXPos, oldYPos);
+                } else {
+                        food--;
+                }
+                if (getBrick(snakeXPos, snakeYPos) == 9) {
+                        world[snakeXPos][snakeYPos] = 4;
+                        food += 2;
+                        placeApple();
+                }
+                if ( getBrick(snakeXPos, snakeYPos) == 4) {
+                        world[snakeXPos][snakeYPos] = direction;
+                } else {
+                        snakeXPos = -1;
+                        snakeYPos = -1;
+                        endGame();
+                }
+        }
 public:
         int **world;
         int snakeXPos, snakeYPos;
         int direction;
         int xsize, ysize;
         int food;
-        World(int x, int y) {
+        World(int x, int y, QObject *parent = 0) : QObject (parent) {
                 xsize = x; ysize = y;
                 snakeXPos = 3;
                 snakeYPos = 3;
@@ -46,32 +76,6 @@ public:
                 }
         }
 
-        void step() {
-                if (snakeXPos == -1) {
-                        return;
-                }
-                int oldXPos = snakeXPos;
-                int oldYPos = snakeYPos;
-                snakeXPos += getRelXDir(direction);
-                snakeYPos += getRelYDir(direction);
-                if (!food) {
-                        removeEnd(oldXPos, oldYPos);
-                } else {
-                        food--;
-                }
-                if (getBrick(snakeXPos, snakeYPos) == 9) {
-                        world[snakeXPos][snakeYPos] = 4;
-                        food += 2;
-                        placeApple();
-                }
-                if ( getBrick(snakeXPos, snakeYPos) == 4) {
-                        world[snakeXPos][snakeYPos] = direction;
-                } else {
-                        snakeXPos = -1;
-                        snakeYPos = -1;
-                        endGame();
-                }
-        }
         bool removeEnd(int x, int y) {
                 if (3 < world[x][y]) {
                         return false;
@@ -93,12 +97,6 @@ public:
 
         bool inBounds(int x, int y) {
                 return 0 <= x && x < xsize && 0 <= y && y < ysize;
-        }
-
-        void swap(int x1, int y1, int x2, int y2) {
-                int tmp = world[x1][y1];
-                world[x1][y1] = world[x2][y2];
-                world[x2][y2] = tmp;
         }
 
         int getRelXDir(int dir) {

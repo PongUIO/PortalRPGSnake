@@ -7,7 +7,7 @@
 #include "world.h"
 
 class MyGLDrawer : public QGLWidget {
-	Q_OBJECT        // must include this if you use Qt signals/slots
+        Q_OBJECT
 
 public slots:
         void redraw() {
@@ -61,7 +61,6 @@ protected:
         // overridden
         void keyPressEvent (QKeyEvent *event) {
                 world->changeDir(event->key());
-                world->step();
         }
 
         // overriden
