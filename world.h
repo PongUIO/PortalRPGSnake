@@ -74,6 +74,12 @@ public:
 
         void handleInput(int key) {
                 bool stepAfter = true;
+
+                /*
+                int revDir = direction - 2;
+                if (revDir < 0) { revDir += 4; }
+                */
+
                 if (key == Qt::Key_W) {
                         direction = SNAKEUP;
                 } else if (key == Qt::Key_A) {
@@ -82,23 +88,65 @@ public:
                         direction = SNAKEDOWN;
                 } else if (key == Qt::Key_D) {
                         direction = SNAKERIGHT;
-                } else if (key == Qt::Key_Control) {
+                } else {
+                    stepAfter = false;
+
+                    if (key == Qt::Key_Control) {
                         portalColor = !portalColor;
-                        stepAfter = false;
+
+                    } else if (key == Qt::Key_Up) {
+                        //if (revDir == SNAKEUP) { return; }
+                        shootPortal(SNAKEUP);
+
+                    } else if (key == Qt::Key_Left) {
+                        //if (revDir == SNAKELEFT) { return; }
+                        shootPortal(SNAKELEFT);
+
+                    } else if (key == Qt::Key_Down) {
+                        //if (revDir == SNAKEDOWN) { return; }
+                        shootPortal(SNAKEDOWN);
+
+                    } else if (key == Qt::Key_Right) {
+                        //if (revDir == SNAKERIGHT) { return; }
+                        shootPortal(SNAKERIGHT);
+                    }
                 }
+
                 if (stepAfter) {
                         skipNext = false;
                         step();
                         skipNext = true;
                 }
+
+
         }
 
         void shootPortal(int dir) {
-
+            // snakeXPos, snakeYPos
         }
 
-        void getFirstWallForDirection(int &x, int &y) {
+        bool getFirstWallForDirection(int dir, int *x, int *y) {
+            int max = 0;
 
+            if ( dir == SNAKEUP || dir == SNAKEDOWN ) {
+                max = ysize;
+            } else if (dir == SNAKELEFT || dir == SNAKERIGHT) {
+                max = xsize;
+            } else {
+                return;
+            }
+
+            int testX = snakeXPos, testY = snakeYPos;
+            for (int i = 0; i < max; i++) {
+                testX += getRelXDir(dir);
+                testY += getRelYDir(dir);
+
+                if (!inBounds(testX, testY)) {
+                    return false;
+                }
+
+
+            }
         }
 
         bool removeEnd(int x, int y) {
