@@ -7,6 +7,7 @@
 #include "render.h"
 #include "customlabel.h"
 #include "gamebutton.h"
+#include "world.h"
 
 #ifndef RATE
 #define RATE 60
@@ -20,17 +21,18 @@ class GameController {
 public:
 	QWidget *main;
 	QTimer *glTimer, *camTimer, *timer;
-	Camera *cam;
+        Camera *cam;
+        World *world;
 #ifdef WIN32
 	QPalette *p;
 #endif
         GameController(QWidget *parent = 0) {
-
+                world = new World(10, 10);
 		main = new QWidget(parent);
 		main->showFullScreen();
                 main->resize(parent->geometry().width(), parent->geometry().height());
 		cam = new Camera(0, 0, main->width(), main->height());
-                MyGLDrawer *drawer = new MyGLDrawer(cam, main);
+                MyGLDrawer *drawer = new MyGLDrawer(cam, world, main);
 
 		glTimer = new QTimer(main);
 		drawer->connect(glTimer, SIGNAL(timeout()), drawer, SLOT(redraw()));

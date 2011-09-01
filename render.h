@@ -4,6 +4,7 @@
 #include<iostream>
 #include <QGLWidget>
 #include "camera.h"
+#include "world.h"
 
 class MyGLDrawer : public QGLWidget {
 	Q_OBJECT        // must include this if you use Qt signals/slots
@@ -21,37 +22,48 @@ public slots:
 public:
         int lastX, lastY;
         Camera *cam;
-        float colors[6][3];
-        MyGLDrawer(Camera *cam, QWidget *parent = 0)
-		: QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
+        float colors[8][3];
+        World *world;
+        MyGLDrawer(Camera *cam, World *world, QWidget *parent = 0)
+                : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
+                setFocusPolicy(Qt::StrongFocus);
+                this->world = world;
                 this->cam = cam;
                 lastX = width()/2;
                 lastY = height()/2;
-                colors[0][0] = 0;
-                colors[0][1] = 0.9;
-                colors[0][2] = 0;
-                colors[1][0] = 0.6;
-                colors[1][1] = 0.25;
-                colors[1][2] = 0;
-                for (int i = 2; i < 6; i++) {
+                for (int i = 0; i < 4; i++) {
                         colors[i][0] = 1;
                         colors[i][1] = 1;
                         colors[i][2] = 0;
                 }
+                colors[4][0] = 0;
+                colors[4][1] = 0.9;
+                colors[4][2] = 0;
+                colors[5][0] = 0.6;
+                colors[5][1] = 0.25;
+                colors[5][2] = 0;
+                colors[6][0] = 1;
+                colors[6][1] = 0;
+                colors[6][2] = 0;
+                colors[7][0] = 0;
+                colors[7][1] = 0;
+                colors[7][2] = 1;
 
         }
 
 protected:
         // overridden
         void keyPressEvent (QKeyEvent *event) {
-		//              qDebug() << event->key();
+                world->changeDir(event->key());
+                world->step();
+                qDebug() << event->key();
         }
 
         // overriden
         void mouseMoveEvent(QMouseEvent * event) {
                 lastX = event->pos().x();
                 lastY = event->pos().y();
-		//                qDebug() << event->pos().x() << " " << event->pos().y();
+                //qDebug() << event->pos().x() << " " << event->pos().y();
         }
 
         // overridden  
@@ -133,9 +145,8 @@ protected:
                 int ty = -cam->y+cam->zoom*cam->ratio+1;
                 for (i = fx; i < tx; i++) {
                         for (j = fy; j < ty; j++) {
-                                //glBindTexture(GL_TEXTURE_2D, textures[mt]);
                                 glBegin(GL_QUADS);
-                                glColor3fv(colors[1]);
+                                glColor3fv(colors[world->getBrick(i, j)]);
                                 glVertex2f(i,j+1);  // lower left
                                 glVertex2f(i,j); // lower right
                                 glVertex2f(i+1,j);// upper right
@@ -155,12 +166,12 @@ protected:
 		glFinish();
                 swapBuffers();
         }
-        /*double getXPix(int x) {
+        double getXPix(int x) {
                 return -1+(((double)x)/width())*2-cam->x;
         }
         double getYPix(int y) {
                 return 1-(((double)y)/height())*2-cam->y;
-        }*/
+        }
 
 };
 #endif

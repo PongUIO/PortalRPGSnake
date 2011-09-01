@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>graphics/startgame.xcf</file>
+        <file>graphics/startgame.png</file>
     </qresource>
 </RCC>

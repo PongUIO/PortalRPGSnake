@@ -24,10 +24,12 @@ HEADERS  += render.h \
     objectlist.h \
     baseobject.h \
     objectlist.h \
-    baseobject.h
+    baseobject.h \
+    world.h
 
 RESOURCES += \
     resources.qrc
 
 OTHER_FILES += \
-    graphics/startgame.xcf
+    graphics/startgame.xcf \
+    graphics/startgame.png

@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         menu->resize(700,700);
         menu->show();
         CustomLabel *gameButton = new CustomLabel(&gameStart, menu);
-        gameButton->setPixmap(QPixmap(":/graphics/startgame.xcf"));
+        gameButton->setPixmap(QPixmap(":/graphics/startgame.png"));
         gameButton->move(menu->geometry().width()/2-gameButton->pixmap()->width()/2, menu->geometry().height()/2-gameButton->pixmap()->height()/2);
         gameButton->show();
         gc = new GameController(menu);
