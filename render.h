@@ -61,7 +61,7 @@ public:
 protected:
         // overridden
         void keyPressEvent (QKeyEvent *event) {
-                world->changeDir(event->key());
+                world->handleInput(event->key());
         }
 
         // overriden
@@ -160,6 +160,15 @@ protected:
                         }
 
                 }
+                i = world->snakeXPos;
+                j = world->snakeYPos;
+                glBegin(GL_QUADS);
+                glColor3fv(colors[PORTALORANGE + world->portalColor]);
+                glVertex2f(i+0.3, j+0.7);  // lower left
+                glVertex2f(i+0.3,j+0.3); // lower right
+                glVertex2f(i+0.7,j+0.3);// upper right
+                glVertex2f(i+0.7,j+0.7); // upper left
+                glEnd();
 
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glEnable(GL_BLEND);

@@ -4,6 +4,8 @@
 #include <QObject>
 #include <cstdlib>
 
+#include <tiles.h>
+
 class World : public QObject {
        Q_OBJECT
 public slots:
@@ -24,12 +26,12 @@ public slots:
                 } else {
                         food--;
                 }
-                if (getBrick(snakeXPos, snakeYPos) == 9) {
-                        world[snakeXPos][snakeYPos] = 4;
+                if (getBrick(snakeXPos, snakeYPos) == APPLE) {
+                        world[snakeXPos][snakeYPos] = GRASS;
                         food += 2;
                         placeApple();
                 }
-                if ( getBrick(snakeXPos, snakeYPos) == 4) {
+                if ( getBrick(snakeXPos, snakeYPos) == GRASS) {
                         world[snakeXPos][snakeYPos] = direction;
                 } else {
                         snakeXPos = -1;
@@ -43,13 +45,13 @@ public:
         int direction;
         int xsize, ysize;
         int food;
-        bool skipNext;
+        bool skipNext, portalColor;
         World(int x, int y, QObject *parent = 0) : QObject (parent) {
-                skipNext = false;
+                skipNext = portalColor = false;
                 xsize = x; ysize = y;
                 snakeXPos = 3;
                 snakeYPos = 3;
-                direction = 0;
+                direction = SNAKEUP;
                 food = 2;
                 world = new int*[x];
                 for (int i = 0; i < x; i++) {
@@ -66,23 +68,29 @@ public:
                 if ( inBounds(x, y) ) {
                         return world[x][y];
                 } else {
-                        return 5;
+                        return WALL;
                 }
         }
 
-        void changeDir(int dir) {
-                if (dir == Qt::Key_W) {
-                        direction = 0;
-                } else if (dir == Qt::Key_A) {
-                        direction = 1;
-                } else if (dir == Qt::Key_S) {
-                        direction = 2;
-                } else if (dir == Qt::Key_D) {
-                        direction = 3;
+        void handleInput(int key) {
+                bool stepAfter = true;
+                if (key == Qt::Key_W) {
+                        direction = SNAKEUP;
+                } else if (key == Qt::Key_A) {
+                        direction = SNAKELEFT;
+                } else if (key == Qt::Key_S) {
+                        direction = SNAKEDOWN;
+                } else if (key == Qt::Key_D) {
+                        direction = SNAKERIGHT;
+                } else if (key == Qt::Key_Control) {
+                        portalColor = !portalColor;
+                        stepAfter = false;
                 }
-                skipNext = false;
-                step();
-                skipNext = true;
+                if (stepAfter) {
+                        skipNext = false;
+                        step();
+                        skipNext = true;
+                }
         }
 
         void shootPortal(int dir) {
@@ -94,7 +102,7 @@ public:
         }
 
         bool removeEnd(int x, int y) {
-                if (3 < world[x][y]) {
+                if (SNAKERIGHT < world[x][y]) {
                         return false;
                 }
                 int dir = world[x][y];
@@ -104,7 +112,7 @@ public:
                         return true;
                 } else {
                         if (!removeEnd(nx, ny)) {
-                                world[x][y] = 4;
+                                world[x][y] = GRASS;
                                 return true;
                         } else {
                                 return true;
@@ -117,18 +125,18 @@ public:
         }
 
         int getRelXDir(int dir) {
-                if (dir == 1) {
+                if (dir == SNAKELEFT) {
                         return -1;
-                } else if (dir == 3) {
+                } else if (dir == SNAKERIGHT) {
                         return 1;
                 }
                 return 0;
 
         }
         int getRelYDir(int dir) {
-                if (dir == 0) {
+                if (dir == SNAKEUP) {
                         return 1;
-                } else if (dir== 2) {
+                } else if (dir== SNAKEDOWN) {
                         return -1;
                 }
                 return 0;
@@ -138,7 +146,7 @@ public:
                 for (int i = 0; i < xsize; i++) {
                         for (int j = 0; j < ysize; j++) {
                                 if (world[i][j] < 4) {
-                                        world[i][j] = 8;
+                                        world[i][j] = DEADSNAKE;
                                 }
                         }
                 }
@@ -146,7 +154,7 @@ public:
         bool isSpaceLeft() {
                 for (int i = 0; i < xsize; i++) {
                         for (int j = 0; j < ysize; j++) {
-                                if (world[i][j] == 4) {
+                                if (world[i][j] == GRASS) {
                                         return true;
                                 }
                         }
@@ -162,8 +170,8 @@ public:
                 while (true) {
                         apX = rand()%xsize;
                         apY = rand()%ysize;
-                        if (world[apX][apY] == 4) {
-                                world[apX][apY] = 9;
+                        if (world[apX][apY] == GRASS) {
+                                world[apX][apY] = APPLE;
                                 break;
                         }
                 }
