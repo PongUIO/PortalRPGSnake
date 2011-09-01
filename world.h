@@ -125,8 +125,28 @@ public:
             // snakeXPos, snakeYPos
         }
 
-        void getFirstWallForDirection(int dir) {
+        bool getFirstWallForDirection(int dir, int *x, int *y) {
+            int max = 0;
 
+            if ( dir == SNAKEUP || dir == SNAKEDOWN ) {
+                max = ysize;
+            } else if (dir == SNAKELEFT || dir == SNAKERIGHT) {
+                max = xsize;
+            } else {
+                return;
+            }
+
+            int testX = snakeXPos, testY = snakeYPos;
+            for (int i = 0; i < max; i++) {
+                testX += getRelXDir(dir);
+                testY += getRelYDir(dir);
+
+                if (!inBounds(testX, testY)) {
+                    return false;
+                }
+
+
+            }
         }
 
         bool removeEnd(int x, int y) {
