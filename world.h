@@ -59,7 +59,7 @@ public:
                         world[i][0] = WALL;
                         world[i][y-1] = WALL;
                         for (int j = 0; j < y; j++) {
-                                world[i][j] = GRASS - (j == 0 || j == y-1) *(WALL-GRASS);
+                                world[i][j] = GRASS + (j == 0 || j == y-1) *(WALL-GRASS);
                         }
                 }
                 world[snakeXPos][snakeYPos] = direction;
