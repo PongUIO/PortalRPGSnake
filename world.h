@@ -48,19 +48,23 @@ public:
         bool skipNext, portalColor;
         int blueDir, orangeDir;
         World(int x, int y, QObject *parent = 0) : QObject (parent) {
-                skipNext = portalColor = false;
                 xsize = x; ysize = y;
+                world = new int*[x];
+                for (int i = 0; i < x; i++) {
+                        world[i] = new int[y];
+                }
+                init();
+        }
+
+        void init() {
+                skipNext = portalColor = false;
                 snakeXPos = 3;
                 snakeYPos = 3;
                 direction = SNAKEUP;
                 food = 2;
-                blueDir = -1;
-                orangeDir = -1;
-                world = new int*[x];
-                for (int i = 0; i < x; i++) {
-                        world[i] = new int[y];
-                        for (int j = 0; j < y; j++) {
-                                world[i][j] = GRASS + (j == 0 || j == y-1 || i == 0 || i == x-1) *(WALL-GRASS);
+                for (int i = 0; i < xsize; i++) {
+                        for (int j = 0; j < ysize; j++) {
+                                world[i][j] = GRASS + (j == 0 || j == ysize-1 || i == 0 || i == xsize-1) *(WALL-GRASS);
                         }
                 }
                 world[snakeXPos][snakeYPos] = direction;
@@ -112,6 +116,8 @@ public:
                     } else if (key == Qt::Key_Right) {
                         //if (revDir == SNAKERIGHT) { return; }
                         shootPortal(SNAKERIGHT);
+                    } else if (key == Qt::Key_R) {
+                            init();
                     }
                 }
 
