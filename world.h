@@ -130,7 +130,7 @@ public:
 
         int reverseDir(int dir) {
             int rev = direction - 2;
-            if (rev < 0) { revDir += 4; }
+            if (rev < 0) { rev += 4; }
             return rev;
         }
 
