@@ -138,15 +138,16 @@ protected:
                 glClear(GL_COLOR_BUFFER_BIT);
                 glMatrixMode(GL_PROJECTION);
                 glLoadIdentity();
-                glOrtho(-cam->zoom, cam->zoom, -cam->zoom*cam->ratio, cam->zoom*cam->ratio, 0.01, 1000);
-                glTranslatef(cam->x,cam->y,-1);
+
+		glOrtho(-cam->zoom, cam->zoom, -cam->zoom*cam->ratio, cam->zoom*cam->ratio, 0.01, 1000);
+		glTranslatef(cam->x,cam->y,-1);
 
                 glMatrixMode(GL_MODELVIEW);
                 glLoadIdentity();
                 // draw the scene:
                 //glRotatef( ... );
                 //glMaterialfv( ... );
-                //glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
+		//glDrawPixels(data.width(), data.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
                 glEnable(GL_TEXTURE_2D);
 
                 //       glViewport(cam->x, cam->y, getWidth(), getHeight());
@@ -165,9 +166,9 @@ protected:
                                 glEnd();
                         }
 
-                }
-                i = world->snakeXPos;
-                j = world->snakeYPos;
+		}
+		i = world->snake->x;
+		j = world->snake->y;
                 if (i != -1) {
                         glBegin(GL_QUADS);
                         glColor3fv(colors[PORTALORANGE + world->portalColor]);
@@ -176,9 +177,28 @@ protected:
                         glVertex2f(i+0.7,j+0.3);// upper right
                         glVertex2f(i+0.7,j+0.7); // upper left
                         glEnd();
-                }
+		}
 
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(-1, 1, -1, 1, 0.01, 1000);
+		glTranslatef(0,0,-1);
+		double hpPercent = (((double)world->snake->hp)/world->snake->maxhp)*0.96;
+		double xpPercent = (((double)world->snake->xp)/world->snake->getXpToLevel());
+		glBegin(GL_QUADS);
+		glColor3f(hpPercent, 0, 0);
+		glVertex2f(hpPercent, 0.99);  // lower left
+		glVertex2f(hpPercent, 0.92); // lower right
+		glVertex2f(-hpPercent, 0.92);// upper right
+		glVertex2f(-hpPercent, 0.99); // upper left
+		glColor3f(xpPercent, xpPercent, 0);
+		glVertex2f(-0.96, 0.92);  // lower left
+		glVertex2f(-0.96, 0.85); // lower right
+		glVertex2f(-0.96 + xpPercent*1.92, 0.85);// upper right
+		glVertex2f(-0.96 + xpPercent*1.92, 0.92); // upper left
+		glEnd();
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glEnable(GL_BLEND);
 
                 glBlendFunc(GL_ONE, GL_ZERO);

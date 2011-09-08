@@ -5,6 +5,7 @@
 #include<stdlib.h>
 #include<typeinfo>
 
+#include "snake.h"
 #include "render.h"
 #include "customlabel.h"
 #include "gamebutton.h"
@@ -27,18 +28,19 @@ public:
 	QWidget *main;
         QTimer *glTimer, *camTimer, *timer, *gameTimer;
         Camera *cam;
-        World *world;
+	World *world;
+	Snake *snake;
 #ifdef WIN32
 	QPalette *p;
 #endif
         GameController(QWidget *parent = 0) {
+		snake = new Snake();
 		main = new QWidget(parent);
-                world = new World(10, 10);
+		world = new World(10, 10, snake);
                 main->showFullScreen();
                 main->resize(parent->geometry().width(), parent->geometry().height());
-                cam = new Camera(-5, -5, main->width(), main->height());
-                MyGLDrawer *drawer = new MyGLDrawer(cam, world, main);
-
+		cam = new Camera(-5, -5, main->width(), main->height());
+		MyGLDrawer *drawer = new MyGLDrawer(cam, world, main);
 		glTimer = new QTimer(main);
 		drawer->connect(glTimer, SIGNAL(timeout()), drawer, SLOT(redraw()));
 		glTimer->start(0);

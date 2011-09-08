@@ -27,9 +27,9 @@ int main(int argc, char *argv[]) {
         QWidget *menu = new QWidget();
         //menu->showFullScreen();
         //menu->resize(QApplication::desktop()->screenGeometry().width(),QApplication::desktop()->screenGeometry().height());
-        menu->resize(700,700);
+	menu->resize(700,700);
         menu->show();
-        CustomLabel *gameButton = new CustomLabel(&gameStart, menu);
+	CustomLabel *gameButton = new CustomLabel(&gameStart, menu);
         gameButton->setPixmap(QPixmap(":/graphics/startgame.png"));
         gameButton->move(menu->geometry().width()/2-gameButton->pixmap()->width()/2, menu->geometry().height()/2-gameButton->pixmap()->height()/2);
         gameButton->show();
