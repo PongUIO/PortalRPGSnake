@@ -5,6 +5,8 @@ class Snake {
         public:
 		int hp, juggernaut, defense, offense, maxhp, xp, level, x, y, food;
 		Snake () {
+		}
+		void init() {
 			x = y = food = 2;
 			hp = 10;
 			maxhp = 10;
@@ -15,9 +17,17 @@ class Snake {
 			level = 1;
 		}
 		void update() {
+			if (hp < 0) {
+				x = -1;
+				return;
+			}
+			if (hp < maxhp) {
+				hp++;
+			}
 			if (xp >= getXpToLevel()) {
 				xp-= getXpToLevel();
 				level++;
+				food+=2;
 			}
 		}
 		int getXpToLevel() {

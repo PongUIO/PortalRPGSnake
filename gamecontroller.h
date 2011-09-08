@@ -36,9 +36,9 @@ public:
         GameController(QWidget *parent = 0) {
 		snake = new Snake();
 		main = new QWidget(parent);
-		world = new World(10, 10, snake);
+		world = new World(640, 640, snake);
                 main->showFullScreen();
-                main->resize(parent->geometry().width(), parent->geometry().height());
+		main->resize(parent->geometry().width(), parent->geometry().height());
 		cam = new Camera(-5, -5, main->width(), main->height());
 		MyGLDrawer *drawer = new MyGLDrawer(cam, world, main);
 		glTimer = new QTimer(main);

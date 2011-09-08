@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "world.h"
 #include "tiles.h"
+#include "snake.h"
 
 class MyGLDrawer : public QGLWidget {
         Q_OBJECT
@@ -58,8 +59,8 @@ public:
                 colors[WALLOUTSIDE][0] = 0.4;
                 colors[WALLOUTSIDE][1] = 0.16;
                 colors[WALLOUTSIDE][2] = 0;
-                colors[GLASS][0] = 0.9;
-                colors[GLASS][1] = 0.9;
+		colors[GLASS][0] = 0.8;
+		colors[GLASS][1] = 0.8;
                 colors[GLASS][2] = 1;
 
         }
@@ -132,7 +133,11 @@ protected:
 
         // overridden
         void paintGL()
-        {
+	{
+		if (world->snake->x != -1) {
+			cam->x = -world->snake->x;
+			cam->y = -world->snake->y;
+		}
                 cam->iter();
                 int i, j;
                 glClear(GL_COLOR_BUFFER_BIT);
@@ -187,16 +192,23 @@ protected:
 		double hpPercent = (((double)world->snake->hp)/world->snake->maxhp)*0.96;
 		double xpPercent = (((double)world->snake->xp)/world->snake->getXpToLevel());
 		glBegin(GL_QUADS);
-		glColor3f(hpPercent, 0, 0);
+		glColor3f(hpPercent/2+0.5, 0, 0);
 		glVertex2f(hpPercent, 0.99);  // lower left
 		glVertex2f(hpPercent, 0.92); // lower right
 		glVertex2f(-hpPercent, 0.92);// upper right
 		glVertex2f(-hpPercent, 0.99); // upper left
-		glColor3f(xpPercent, xpPercent, 0);
+		glColor3f(xpPercent/2+0.5, xpPercent/2+0.5, 0);
 		glVertex2f(-0.96, 0.92);  // lower left
 		glVertex2f(-0.96, 0.85); // lower right
 		glVertex2f(-0.96 + xpPercent*1.92, 0.85);// upper right
 		glVertex2f(-0.96 + xpPercent*1.92, 0.92); // upper left
+		glEnd();
+		glBegin(GL_QUADS);
+		glColor3fv(colors[PORTALORANGE + world->portalColor]);
+		glVertex2f(1, -1);  // lower left
+		glVertex2f(0.95, -1); // lower right
+		glVertex2f(0.95,-0.95);// upper right
+		glVertex2f(1, -0.95); // upper left
 		glEnd();
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glEnable(GL_BLEND);

@@ -48,8 +48,8 @@ public:
                 y += yPixToDouble(lastY)*(-fabs(dzoom*5));
                 if (zoom < 0.01) {
                         zoom = 0.01;
-                } else if (zoom > 32) {
-                        zoom = 32;
+		} else if (zoom > 32000) {
+			zoom = 32000;
                 }
         }
 
