@@ -23,7 +23,7 @@ public slots:
 public:
         int lastX, lastY;
         Camera *cam;
-        float colors[11][3];
+        float colors[12][3];
         World *world;
         MyGLDrawer(Camera *cam, World *world, QWidget *parent = 0)
                         : QGLWidget(QGLFormat(QGL::SampleBuffers), parent) {
@@ -58,6 +58,9 @@ public:
                 colors[WALLOUTSIDE][0] = 0.4;
                 colors[WALLOUTSIDE][1] = 0.16;
                 colors[WALLOUTSIDE][2] = 0;
+                colors[GLASS][0] = 0.9;
+                colors[GLASS][1] = 0.9;
+                colors[GLASS][2] = 1;
 
         }
 

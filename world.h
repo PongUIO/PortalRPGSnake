@@ -18,43 +18,43 @@ public slots:
                 if (snakeXPos == -1) {
                         return;
                 }
-                int oldXPos = snakeXPos;
-                int oldYPos = snakeYPos;
+		if (!food) {
+			removeEnd(snakeXPos, snakeYPos);
+		} else {
+			food--;
+		}
                 snakeXPos += getRelXDir(direction);
                 snakeYPos += getRelYDir(direction);
-                if (!food) {
-                        removeEnd(oldXPos, oldYPos);
-                } else {
-                        food--;
-                }
-                while (getBlock(snakeXPos, snakeYPos) == APPLE) {
-                        world[snakeXPos][snakeYPos] = GRASS;
-                        food += 2;
-                        placeApple();
-                }
+		while (getBlock(snakeXPos, snakeYPos) == APPLE) {
+			world[snakeXPos][snakeYPos] = GRASS;
+			food += 2;
+			placeApple();
+		}
                 if (getBlock(snakeXPos, snakeYPos) == PORTALORANGE ) {
                         gotoPortal(&snakeXPos, &snakeYPos, PORTALBLUE, true);
                 }
                 if ( getBlock(snakeXPos, snakeYPos) == PORTALBLUE ) {
                         gotoPortal(&snakeXPos, &snakeYPos, PORTALORANGE, true);
                 }
-                if ( getBlock(snakeXPos, snakeYPos) == GRASS) {
+		if ( getBlock(snakeXPos, snakeYPos) == GRASS) {
                         world[snakeXPos][snakeYPos] = direction;
                 } else {
                         snakeXPos = -1;
                         snakeYPos = -1;
                         endGame();
                 }
+
         }
 public:
         int **world;
-        int snakeXPos, snakeYPos, direction, xsize, ysize, food, bluePortalDir, orangePortalDir;
+	int snakeXPos, snakeYPos, direction, xsize, ysize, food, bluePortalDir, orangePortalDir;
         bool skipNext, portalColor;
         int blueDir, orangeDir;
         World(int x, int y, QObject *parent = 0) : QObject (parent) {
                 xsize = x; ysize = y;
                 world = new int*[x];
-                for (int i = 0; i < x; i++) {
+		for (int i = 0; i < x; i++)
+		{
                         world[i] = new int[y];
                 }
                 init();
@@ -69,7 +69,7 @@ public:
                 food = 2;
                 for (int i = 0; i < xsize; i++) {
                         for (int j = 0; j < ysize; j++) {
-                                world[i][j] = GRASS + (j == 0 || j == ysize-1 || i == 0 || i == xsize-1) *(WALL-GRASS);
+                                world[i][j] = (j != 5)*(GRASS + (j == 0 || j == ysize-1 || i == 0 || i == xsize-1) *(WALL-GRASS)) + (j == 5)*GLASS;
                         }
                 }
                 world[snakeXPos][snakeYPos] = direction;
@@ -221,9 +221,14 @@ public:
                 return false;
         }
 
-        bool removeEnd(int x, int y) {
-                int block = world[x][y];
-                if (block == PORTALORANGE) {
+	bool removeEnd(int x, int y) {
+		int block = world[x][y];
+		if (block & TAGGED) {
+			return false;
+		} else {
+			world[x][y] |= TAGGED;
+		}
+		if (block == PORTALORANGE) {
                         gotoPortal(&x, &y, PORTALBLUE, false);
                         block = world[x][y];
                 }
@@ -240,7 +245,8 @@ public:
                         return true;
                 } else {
                         if (!removeEnd(nx, ny)) {
-                                world[x][y] = GRASS;
+				world[x][y] = GRASS;
+				unTag();
                                 return true;
                         } else {
                                 return true;
@@ -312,6 +318,16 @@ public:
                 int v = getBlock(x, y);
                 return v == WALL || v == WALLOUTSIDE;
         }
+	void unTag() {
+		for (int i = 0; i < xsize; i++) {
+			for (int j = 0; j < ysize; j++) {
+				if (world[i][j] & TAGGED) {
+					world[i][j] -= TAGGED;
+				}
+			}
+		}
+
+	}
 };
 
 #endif // WORLD_H
