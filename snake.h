@@ -3,7 +3,13 @@
 
 class Snake {
         public:
-                int hp, juggernaut, defence;
+		int hp, juggernaut, defence, offense;
+		Snake () {
+			hp = 10;
+			juggernaut = 0;
+			defence = 0;
+			offense = 0;
+		}
 }
 
 #endif // SNAKE_H
