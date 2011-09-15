@@ -61,7 +61,7 @@ public slots:
                         } else if (getBlock(snake->x, snake->y) == WALL) {
                                 snake->damage(15);
                                 world[snake->x][snake->y] = snake->direction;
-                        } else if (getBlock(snake->x, snake->y) == WALLOUTSIDE) {
+                        } else {
                                 snake->hp = -1;
                         }
                         snake->update();

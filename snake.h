@@ -1,8 +1,6 @@
 #ifndef SNAKE_H
 #define SNAKE_H
-<<<<<<< HEAD
 #include <stdlib.h>
-=======
 
 enum {
     POWER_NONE = 0,
@@ -12,7 +10,6 @@ enum {
     POWER_LAST,
 };
 
->>>>>>> eb37fe470f72d1a4dc36deec6313ecd86bac60b9
 class Snake {
         public:
                 int hp, juggernaut, defense, offense, maxhp, xp, level, x, y, food, direction, stepcount;
