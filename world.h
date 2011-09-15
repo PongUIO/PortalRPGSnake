@@ -25,6 +25,11 @@ public slots:
 		if (snake->x == -1) {
                         return;
                 }
+
+                if (snake->getPowerup(POWER_SLOWSPEED) && snake->shouldSkipMove()) {
+                        return;
+                }
+
 		int oldX = snake->x;
                 int oldY = snake->y;
                 snake->x += getRelXDir(snake->direction);
@@ -168,10 +173,13 @@ public:
                                 shootPortal(SNAKERIGHT);
                         } else if (key == Qt::Key_R) {
                                 init();
+                        } else if (key == Qt::Key_1) {
+                                snake->togglePowerup(POWER_SLOWSPEED);
                         }
                 }
 
                 if (stepAfter) {
+                        snake->forceStep();
                         skipNext = false;
                         step();
                         skipNext = true;
