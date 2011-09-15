@@ -1,6 +1,14 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
+typedef enum {
+    POWER_NONE = 0,
+
+    POWER_HIGHSPEED,
+
+    POWER_LAST,
+} Powerup;
+
 class Snake {
         public:
                 int hp, juggernaut, defense, offense, maxhp, xp, level, x, y, food, direction;
