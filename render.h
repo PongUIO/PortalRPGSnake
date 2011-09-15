@@ -2,7 +2,9 @@
 #define RENDER_H
 #include<QtGui>
 #include<iostream>
-#include <QGLWidget>
+#include<QGLWidget>
+#include<stdlib.h>
+
 #include "camera.h"
 #include "world.h"
 #include "tiles.h"
@@ -188,8 +190,8 @@ protected:
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(-1, 1, -1, 1, 0.01, 1000);
-		glTranslatef(0,0,-1);
-		double hpPercent = (((double)world->snake->hp)/world->snake->maxhp)*0.96;
+                glTranslatef(0,0,-1);
+                double hpPercent = std::max((((double)world->snake->hp)/world->snake->maxhp)*0.96, 0.);
 		double xpPercent = (((double)world->snake->xp)/world->snake->getXpToLevel());
 		glBegin(GL_QUADS);
 		glColor3f(hpPercent/2+0.5, 0, 0);

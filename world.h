@@ -26,7 +26,7 @@ public slots:
                         return;
                 }
 		int oldX = snake->x;
-		int oldY = snake->y;
+                int oldY = snake->y;
                 snake->x += getRelXDir(snake->direction);
                 snake->y += getRelYDir(snake->direction);
 		if (!snake->food) {
@@ -50,8 +50,16 @@ public slots:
 		if ( getBlock(snake->x, snake->y) == GRASS) {
                         world[snake->x][snake->y] = snake->direction;
                 } else {
-			snake->x = -1;
-			snake->y = -1;
+                        if (getBlock(snake->x, snake->y) == GLASS) {
+                                snake->damage(5);
+                                world[snake->x][snake->y] = snake->direction;
+                        } else if (getBlock(snake->x, snake->y) == WALL) {
+                                snake->damage(15);
+                                world[snake->x][snake->y] = snake->direction;
+                        } else if (getBlock(snake->x, snake->y) == WALLOUTSIDE) {
+                                snake->hp = -1;
+                        }
+                        snake->update();
                 }
 
         }
@@ -61,7 +69,7 @@ public:
         int xsize, ysize, bluePortalDir, orangePortalDir, bluePortalX, bluePortalY, orangePortalX, orangePortalY;
 	bool skipNext, portalColor;
 	int blueDir, orangeDir;
-	bool loading;
+        bool loading;
 	World(int x, int y, Snake *snake, QObject *parent = 0) : QObject (parent) {
 		loading = true;
 		this->snake = snake;

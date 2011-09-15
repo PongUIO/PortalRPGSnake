@@ -25,12 +25,10 @@ class Snake {
                         direction = SNAKERIGHT;
 		}
 		void update() {
-			if (hp < 0) {
-				x = -1;
+                        if (hp <= 0) {
+                                x = -1;
+                                y = -1;
 				return;
-			}
-			if (hp < maxhp) {
-				hp++;
 			}
 			if (xp >= getXpToLevel()) {
 				xp-= getXpToLevel();
@@ -40,7 +38,10 @@ class Snake {
 		}
 		int getXpToLevel() {
 			return level*10;
-		}
+                }
+                void damage(int dmg) {
+                     hp -= std::max(0, dmg-defense);
+                }
 };
 
 #endif // SNAKE_H
