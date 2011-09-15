@@ -118,12 +118,24 @@ public:
                 bool stepAfter = true;
 
                 if (key == Qt::Key_W) {
+                        if (snake->direction == SNAKEDOWN) {
+                                return;
+                        }
                         snake->direction = SNAKEUP;
                 } else if (key == Qt::Key_A) {
+                        if (snake->direction == SNAKERIGHT) {
+                                return;
+                        }
                         snake->direction = SNAKELEFT;
                 } else if (key == Qt::Key_S) {
+                        if (snake->direction == SNAKEUP) {
+                                return;
+                        }
                         snake->direction = SNAKEDOWN;
                 } else if (key == Qt::Key_D) {
+                        if (snake->direction == SNAKELEFT) {
+                                return;
+                        }
                         snake->direction = SNAKERIGHT;
                 } else {
                         stepAfter = false;
