@@ -36,7 +36,7 @@ public:
         GameController(QWidget *parent = 0) {
 		snake = new Snake();
 		main = new QWidget(parent);
-		world = new World(640, 640, snake);
+                world = new World(16, 16, snake);
                 main->showFullScreen();
 		main->resize(parent->geometry().width(), parent->geometry().height());
 		cam = new Camera(-5, -5, main->width(), main->height());

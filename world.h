@@ -4,6 +4,7 @@
 #include <QObject>
 #include <cstdlib>
 #include <iostream>
+#include <QDebug>
 
 #include <tiles.h>
 
@@ -26,20 +27,18 @@ public slots:
                 }
 		int oldX = snake->x;
 		int oldY = snake->y;
-		snake->x += getRelXDir(direction);
-		snake->y += getRelYDir(direction);
+                snake->x += getRelXDir(snake->direction);
+                snake->y += getRelYDir(snake->direction);
 		if (!snake->food) {
-			removeEnd(oldX, oldY, false);
+                        removeEnd(oldX, oldY, false, false);
 		} else {
 			snake->food--;
 		}
 		if (getBlock(snake->x, snake->y) == PORTALORANGE ) {
 			gotoPortal(&snake->x, &snake->y, PORTALBLUE, true);
-		}
-		if ( getBlock(snake->x, snake->y) == PORTALBLUE ) {
+		} else if ( getBlock(snake->x, snake->y) == PORTALBLUE ) {
 			gotoPortal(&snake->x, &snake->y, PORTALORANGE, true);
-		}
-		if (getBlock(snake->x, snake->y) == DEADSNAKE) {
+		} else if (getBlock(snake->x, snake->y) == DEADSNAKE) {
 			snake->food++;
 			world[snake->x][snake->y] = GRASS;
 		}
@@ -49,7 +48,7 @@ public slots:
 			placeApple();
 		}
 		if ( getBlock(snake->x, snake->y) == GRASS) {
-			world[snake->x][snake->y] = direction;
+                        world[snake->x][snake->y] = snake->direction;
                 } else {
 			snake->x = -1;
 			snake->y = -1;
@@ -59,7 +58,7 @@ public slots:
 public:
 	Snake *snake;
 	char **world;
-	int direction, xsize, ysize, bluePortalDir, orangePortalDir, bluePortalX, bluePortalY, orangePortalX, orangePortalY;
+        int xsize, ysize, bluePortalDir, orangePortalDir, bluePortalX, bluePortalY, orangePortalX, orangePortalY;
 	bool skipNext, portalColor;
 	int blueDir, orangeDir;
 	bool loading;
@@ -80,14 +79,12 @@ public:
 		bluePortalDir = orangePortalDir = bluePortalX = bluePortalY = orangePortalX = orangePortalY = -1;
 		snake->init();
 		skipNext = portalColor = false;
-		snake->y= snake->food = snake->x = 2;
-		direction = SNAKERIGHT;
                 for (int i = 0; i < xsize; i++) {
                         for (int j = 0; j < ysize; j++) {
                                 world[i][j] = (j != 5)*(GRASS + (j == 0 || j == ysize-1 || i == 0 || i == xsize-1) *(WALL-GRASS)) + (j == 5)*GLASS;
                         }
                 }
-		world[snake->x][snake->y] = direction;
+                world[snake->x][snake->y] = snake->direction;
 		for (int i = 0; i < 64; i++) {
 			placeApple();
 		}
@@ -105,7 +102,7 @@ public:
                 *y += getRelYDir(dir);
                 *x += getRelXDir(dir);
                 if (changeDir) {
-                        direction = dir;
+                        snake->direction = dir;
                 }
         }
 
@@ -120,19 +117,14 @@ public:
         void handleInput(int key) {
                 bool stepAfter = true;
 
-                /*
-                int revDir = direction - 2;
-                if (revDir < 0) { revDir += 4; }
-                */
-
                 if (key == Qt::Key_W) {
-                        direction = SNAKEUP;
+                        snake->direction = SNAKEUP;
                 } else if (key == Qt::Key_A) {
-                        direction = SNAKELEFT;
+                        snake->direction = SNAKELEFT;
                 } else if (key == Qt::Key_S) {
-                        direction = SNAKEDOWN;
+                        snake->direction = SNAKEDOWN;
                 } else if (key == Qt::Key_D) {
-                        direction = SNAKERIGHT;
+                        snake->direction = SNAKERIGHT;
                 } else {
                         stepAfter = false;
 
@@ -169,10 +161,10 @@ public:
         void shootPortal(int dir) {
 		// snake->x, snake->y
                 int portalX = 0, portalY = 0;
-
                 if (getFirstWallForDirection(dir, &portalX, &portalY)) {
-			closeOldPortal();
-			world[portalX][portalY] = portalColor ? PORTALBLUE : PORTALORANGE;
+                        removeEnd(snake->x-getRelXDir(snake->direction), snake->y-getRelYDir(snake->direction), true, false);
+                        closeOldPortal();
+                        world[portalX][portalY] = portalColor ? PORTALBLUE : PORTALORANGE;
                         if (portalColor) {
 				bluePortalX = portalX;
 				bluePortalY = portalY;
@@ -250,29 +242,36 @@ public:
                 return false;
         }
 
-	bool removeEnd(int x, int y, bool all) {
+        bool removeEnd(int x, int y, bool killAfterPortal, bool afterPortal) {
 		if (x == snake->x && y == snake->y) {
-			return false;
+                        return false;
 		}
 		int block = world[x][y];
-		if (block == PORTALORANGE) {
+                if (block == PORTALORANGE) {
 			gotoPortal(&x, &y, PORTALBLUE, false);
                         block = world[x][y];
+                        afterPortal = true;
                 }
                 if (block == PORTALBLUE) {
                         gotoPortal(&x, &y, PORTALORANGE, false);
                         block = world[x][y];
+                        afterPortal = true;
                 }
 		if (SNAKERIGHT < block) {
 			return false;
 		}
+                if (killAfterPortal && afterPortal) {
+                        world[x][y] = DEADSNAKE;
+                }
                 int nx = x - getRelXDir(block);
                 int ny = y - getRelYDir(block);
                 if (ny == y && nx == x) {
                         return true;
                 } else {
-			if (!removeEnd(nx, ny, all)) {
-				world[x][y] = GRASS;
+                        if (!removeEnd(nx, ny, killAfterPortal, afterPortal)) {
+                                if ( !killAfterPortal) {
+                                       world[x][y] = GRASS;
+                                }
                                 return true;
                         } else {
                                 return true;

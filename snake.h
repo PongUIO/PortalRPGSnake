@@ -3,18 +3,18 @@
 
 class Snake {
         public:
-		int hp, juggernaut, defense, offense, maxhp, xp, level, x, y, food;
-		Snake () {
-		}
+                int hp, juggernaut, defense, offense, maxhp, xp, level, x, y, food, direction;
+		Snake () {}
 		void init() {
 			x = y = food = 2;
-			hp = 10;
+                        hp = 10;
 			maxhp = 10;
 			juggernaut = 0;
 			defense = 0;
 			offense = 0;
 			xp = 0;
-			level = 1;
+                        level = 1;
+                        direction = SNAKERIGHT;
 		}
 		void update() {
 			if (hp < 0) {
