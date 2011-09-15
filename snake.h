@@ -1,6 +1,6 @@
 #ifndef SNAKE_H
 #define SNAKE_H
-
+#include <stdlib.h>
 class Snake {
         public:
                 int hp, juggernaut, defense, offense, maxhp, xp, level, x, y, food, direction;
