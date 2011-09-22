@@ -51,7 +51,7 @@ public slots:
 			world[snake->x][snake->y] = GRASS;
 			snake->xp += 3;
 			placeApple();
-		}
+                }
 		if ( getBlock(snake->x, snake->y) == GRASS) {
                         world[snake->x][snake->y] = snake->direction;
                 } else {
@@ -60,6 +60,9 @@ public slots:
                                 world[snake->x][snake->y] = snake->direction;
                         } else if (getBlock(snake->x, snake->y) == WALL) {
                                 snake->damage(15);
+                                world[snake->x][snake->y] = snake->direction;
+                        } else if (getBlock(snake->x, snake->y) == CRATE) {
+                                cratePortalHandle(snake->x, snake->y, snake->direction);
                                 world[snake->x][snake->y] = snake->direction;
                         } else {
                                 snake->hp = -1;
@@ -88,6 +91,25 @@ public:
 		loading = false;
         }
 
+        void cratePortalHandle(int x, int y, int dir) {
+                int nx = x + getRelXDir(dir);
+                int ny = y + getRelYDir(dir);
+                int nblock = getBlock(nx, ny);
+                if (nblock == PORTALORANGE || nblock == PORTALBLUE)  {
+                        gotoPortal(&nx, &ny, changeColor(nblock), false);
+                        nblock = getBlock(nx, ny);
+                }
+
+                if (nblock == WALLOUTSIDE || nblock == WALL || nblock <= SNAKERIGHT) {
+                        snake->damage(4);
+                } else if (nblock == APPLE)  {
+                        placeApple();
+                        world[nx][ny] = CRATE;
+                } else {
+                        world[nx][ny] = CRATE;
+                }
+        }
+
         void init() {
 		bluePortalDir = orangePortalDir = bluePortalX = bluePortalY = orangePortalX = orangePortalY = -1;
 		snake->init();
@@ -97,6 +119,7 @@ public:
                                 world[i][j] = (j != 5)*(GRASS + (j == 0 || j == ysize-1 || i == 0 || i == xsize-1) *(WALL-GRASS)) + (j == 5)*GLASS;
                         }
                 }
+                world[xsize/2][ysize/2] = CRATE;
                 world[snake->x][snake->y] = snake->direction;
 		for (int i = 0; i < 64; i++) {
 			placeApple();
@@ -208,7 +231,7 @@ public:
 
         void closeOldPortal() {
                 int x = 0; int y = 0;
- //               findFirstBlock(&x, &y, color);
+                //               findFirstBlock(&x, &y, color);
 		if (portalColor) {
 			if (bluePortalX != -1) {
 				world[bluePortalX][bluePortalY] = WALL;
@@ -298,7 +321,7 @@ public:
                 } else {
                         if (!removeEnd(nx, ny, killAfterPortal, afterPortal)) {
                                 if ( !killAfterPortal) {
-                                       world[x][y] = GRASS;
+                                        world[x][y] = GRASS;
                                 }
                                 return true;
                         } else {
@@ -328,6 +351,10 @@ public:
                 }
                 return 0;
         }
+        char changeColor(int col) {
+                return (col == PORTALORANGE ? PORTALBLUE : PORTALORANGE);
+        }
+
         int flipDir(int dir) {
                 return (dir + 2)%4;
         }
